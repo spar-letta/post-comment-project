@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.14.xsd">
+
+    <changeSet id="202409090832" author="enock">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS posts;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20240909 10:35" author="enock">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_posts" schemaName="posts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tb_posts" schemaName="posts">
+            <column name="post_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="public_id" type="uuid"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="date_modified" type="timestamp"/>
+            <column name="modified_by" type="varchar(250)"/>
+            <column name="created_by_id" type="BIGINT"/>
+            <column name="deleted" type="boolean" defaultValueBoolean="false"/>
+            <column name="content" type="VARCHAR(500)"/>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="tb_posts"
+                                 baseTableSchemaName="posts" constraintName="created_by_id_table_tb_posts"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="public"/>
+    </changeSet>
+
+    <changeSet id="20240913 19:44" author="enock">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comments" schemaName="posts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="comments" schemaName="posts">
+            <column name="comment_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="public_id" type="uuid"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="date_modified" type="timestamp"/>
+            <column name="modified_by" type="varchar(250)"/>
+            <column name="created_by_id" type="BIGINT"/>
+            <column name="deleted" type="boolean" defaultValueBoolean="false"/>
+            <column name="comment_body" type="VARCHAR(255)"/>
+            <column name="post_comment_id" type="VARCHAR(255)"/>
+
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="comments"
+                                 baseTableSchemaName="posts" constraintName="created_by_id_table_comments"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="public"/>
+        <addForeignKeyConstraint baseColumnNames="post_comment_id" baseTableName="comments"
+                                 baseTableSchemaName="posts" constraintName="post_comment_id_table_comments"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="post_id" referencedTableName="tb_posts"
+                                 referencedTableSchemaName="posts"/>
+    </changeSet>
+
+    <changeSet id="20240913 22:01" author="enock">
+        <preConditions>
+            <not>
+                <columnExists tableName="comments" columnName="parent_comment" schemaName="posts"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="comments" schemaName="posts">
+            <column name="parent_comment_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="parent_comment_id" baseTableName="comments"
+                                 baseTableSchemaName="posts" constraintName="parent_comment_id_table_comments"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="comment_id" referencedTableName="comments"
+                                 referencedTableSchemaName="posts"/>
+    </changeSet>
+
+    <changeSet id="20240913 22:47" author="enock">
+        <preConditions>
+            <not>
+                <columnExists tableName="comments" columnName="comment_type" schemaName="posts"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="comments" schemaName="posts">
+            <column name="comment_type" type="varchar(250)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

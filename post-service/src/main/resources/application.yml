@@ -1,0 +1,40 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: post-service
+
+  cloud: #https://cloud.spring.io/spring-cloud-stream-binder-rabbit/multi/multi__retry_with_the_rabbitmq_binder.html , https://docs.spring.io/spring-cloud-stream-binder-rabbit/docs/3.1.3/reference/html/spring-cloud-stream-binder-rabbit.html#_rabbitmq_consumer_properties
+    stream:
+      bindings:
+        post-creation-events:
+          binder: rabbit
+          content-type: application/json
+          destination: post.creation.events
+          posts-subscription: true
+
+  liquibase:
+    change-log: 'classpath:/db/changelog/liquibase.change-log.xml'
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+logging:
+  level:
+    root: INFO
+    com.example.demo_resource_server: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.springframework.security: trace
