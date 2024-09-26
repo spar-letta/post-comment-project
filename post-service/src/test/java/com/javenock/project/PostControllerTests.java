@@ -18,7 +18,7 @@ public class PostControllerTests extends ProjectApplicationTests {
         UserManagementServicesMock.setupMockGetInstitution(wireMockRuleUserManagementService, "testuser");
         PostDto postDto = new PostDto();
         postDto.setTitle("hotels");
-        postDto.setContent("Hotels in Bungoma Town are 5 in number.");
+        postDto.setContent("Hotels in Mewa Town are 5 in number.");
 
         given()
                 .contentType(ContentType.JSON)

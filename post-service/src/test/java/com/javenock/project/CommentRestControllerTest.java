@@ -23,7 +23,7 @@ public class CommentRestControllerTest extends ProjectApplicationTests {
                 .contentType(ContentType.JSON)
                 .auth()
                 .oauth2(accessToken)
-                .body(comment)
+                .body(comment).log().all()
                 .post("/comments")
                 .then().log().all()
                 .statusCode(200)

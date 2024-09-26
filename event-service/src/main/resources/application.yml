@@ -1,46 +1,27 @@
 server:
-  port: 8082
+  port: 8084
 
 spring:
   application:
-    name: post-service
+    name: post-report-service
 
-  datasource:
-    url : 'jdbc:postgresql://localhost:5432/demosso'
-    username: postgres
-    password: 19pool90
 
-  jpa:
-    hibernate:
-      ddl-auto:none
-
+  liquibase:
+    change-log: 'classpath:/db/changelog/liquibase.change-log.xml'
   rabbitmq:
-    host: localhost
+    host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
-
   cloud: #https://cloud.spring.io/spring-cloud-stream-binder-rabbit/multi/multi__retry_with_the_rabbitmq_binder.html , https://docs.spring.io/spring-cloud-stream-binder-rabbit/docs/3.1.3/reference/html/spring-cloud-stream-binder-rabbit.html#_rabbitmq_consumer_properties
     stream:
       bindings:
         post-creation-events:
           binder: rabbit
           content-type: application/json
-          destination: post.creation.events
+          destination: post-creation-events
           durable-subscription: true
-
-  liquibase:
-    change-log: 'classpath:/db/changelog/liquibase.change-log.xml'
-
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          enabled: false
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
+          group: post-report-service
 
 eureka:
   client:

@@ -5,6 +5,7 @@ import com.javenock.project.dto.PostEventDto;
 import com.javenock.project.dto.events.posts.PostCreationEvent;
 import com.javenock.project.exception.MessageException;
 import com.javenock.project.model.Post;
+import com.javenock.project.model.dataType.EventType;
 import com.javenock.project.model.vo.User;
 import com.javenock.project.repository.PostRepository;
 import com.javenock.project.repository.UserRepository;
@@ -40,8 +41,8 @@ public class PostServiceImpl implements PostService {
         post.setDateCreated(LocalDateTime.now());
         post.setCreatedBy(user);
         Post savedPost = postRepository.save(post);
-
-        PostEventDto postEventDto = convertToPostEventDto(savedPost);
+        String description = "post created";
+        PostEventDto postEventDto = convertToPostEventDto(savedPost, description, EventType.post_created);
         eventService.publishEvent(new PostCreationEvent(postEventDto));
         return savedPost;
     }
@@ -76,11 +77,13 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
-    private PostEventDto convertToPostEventDto(Post savedPost) {
+    private PostEventDto convertToPostEventDto(Post savedPost, String description, EventType eventType) {
         PostEventDto postEventDto = new PostEventDto();
         postEventDto.setPublicId(savedPost.getPublicId());
         postEventDto.setTitle(savedPost.getTitle());
         postEventDto.setCreatedByName(savedPost.getCreatedBy().getFirstName());
+        postEventDto.setDescription(description);
+        postEventDto.setEventType(eventType);
         return postEventDto;
     }
 }

@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet author="ADMIN (generated)" id="1561172658475-1">
+        <sql>
+           CREATE SCHEMA IF NOT EXISTS public;
+        </sql>
+    </changeSet>
+
+
+    <changeSet author="ADMIN (enock)" id="202409142139">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="posts" tableName="post_report"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="posts" tableName="post_report">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="public_id" type="UUID"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="creator_name" type="varchar(255)"/>
+            <column name="created_date" type="datetime"/>
+            <column name="description" type="varchar(255)"/>
+            <column name="event_type" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

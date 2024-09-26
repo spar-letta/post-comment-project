@@ -1,0 +1,28 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="enock" id="20240910 13:53">
+        <sql>
+            CREATE TYPE "JSONB" AS json;
+        </sql>
+    </changeSet>
+    <include file="post-report-change-log.xml"/>
+    <include file="/db/changelog/liquibase.change-log.xml"/>
+
+    <changeSet id="202409142138" author="enock">
+        <createSequence sequenceName="hibernate_sequence"
+                        cycle="false"
+                        startValue="1"
+                        incrementBy="1"
+                        maxValue="9223372036854775807"
+                        schemaName="posts"
+                        minValue="1"/>
+    </changeSet>
+
+</databaseChangeLog>

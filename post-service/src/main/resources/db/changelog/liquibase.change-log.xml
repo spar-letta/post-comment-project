@@ -57,7 +57,7 @@
             <column name="created_by_id" type="BIGINT"/>
             <column name="deleted" type="boolean" defaultValueBoolean="false"/>
             <column name="comment_body" type="VARCHAR(255)"/>
-            <column name="post_comment_id" type="VARCHAR(255)"/>
+            <column name="post_comment_id" type="bigint"/>
 
         </createTable>
         <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="comments"
@@ -98,5 +98,6 @@
             <column name="comment_type" type="varchar(250)"/>
         </addColumn>
     </changeSet>
+
 
 </databaseChangeLog>
